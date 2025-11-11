@@ -4,23 +4,23 @@ The project quantifies the techno-economic trade-offs of DC oversizing (Inverter
 
 ---
 
-## Repository overview
+## Repository Overview
 
 | Folder | Description |
 |--------|--------------|
-| **`notebooks/`** | Jupyter notebooks containing all computational steps, from irradiance loading to financial analysis and figure generation. |
-| **`data/`** | Core simulation outputs and derived economic results (CSV files). Large intermediate irradiance and energy time-series files are not included due to size constraints (>20 GB total). |
-| **`docs/`** | Additional documentation or figures used in the manuscript. |
+| **`notebooks/`** | Jupyter notebooks containing all computational steps, from irradiance data retrieval to financial analysis and figure generation. |
+| **`data/`** | Core simulation outputs and derived economic results (CSV files). Large intermediate irradiance time-series are not included due to size constraints (>20 GB). |
+| **`docs/`** | Additional documentation and supporting figures used in the manuscript. |
 
 ---
 
-## Workflow summary
+## Workflow Summary
 
-1. **`1_carga_ficheros_ciudades_FV.ipynb`** – Loads minute-resolution irradiance and temperature data for each capital and prepares PV system inputs.
-2. **`2_calculo_produccion_ciudades_FV.ipynb`** – Calculates hourly and annual PV generation for a range of ILR values using the defined plant model.
-3. **`3_calcula_clipping_FV.ipynb`** – Determines inverter clipping losses and computes effective AC yield.
-4. **`4_analisis_economico.ipynb`** – Combines energy results with cost, PPA, and discount rate assumptions to estimate NPV/I for each configuration.
-5. **`graficos_comparison_ILR.ipynb`** – Generates comparative plots of optimal ILR values, profitability maps, and sensitivity analyses.
+1. **`1_load_city_files.ipynb`** – Retrieves and formats irradiance and temperature data for each capital.
+2. **`2_calculate_city_energy.ipynb`** – Computes DC and AC generation for a range of ILR values.
+3. **`3_calculate_clipping.ipynb`** – Estimates inverter clipping losses and effective energy yield.
+4. **`4_economic_analysis.ipynb`** – Combines energy results with cost, PPA, and discount rate data to estimate profitability (NPV/I).
+5. **`5_generate_figures.ipynb`** – Produces all comparative plots and maps included in the publication.
 
 ---
 
@@ -33,6 +33,16 @@ The project quantifies the techno-economic trade-offs of DC oversizing (Inverter
 | `financial_results_parametric.csv` | Sensitivity results varying module costs and PPA prices. |
 | `optimal_ilr_by_country_all_scenarios.csv` | Summary of optimal ILR values under different financial and technical conditions. |
 
-Large intermediate datasets (minute-level irradiance and DC output per city) are **not uploaded** due to storage limits. However, these files can be **reproduced** directly using the first two notebooks and the public meteorological databases specified in the manuscript.
+---
+## ☀️ Data sources
+
+The irradiance and meteorological inputs used in this study were obtained from the **Copernicus Atmosphere Monitoring Service (CAMS)** through the Atmosphere Data Store:
+
+> [CAMS Solar Radiation Service – Time Series](https://ads.atmosphere.copernicus.eu/datasets/cams-solar-radiation-timeseries?tab=download)
+
+CAMS provides hourly and sub-hourly solar radiation data derived from satellite observations and reanalysis models, available under the **Copernicus Data Licence**.  
+All irradiance datasets were retrieved for the coordinates of each European capital and processed using the notebooks `1_carga_ficheros_ciudades_FV.ipynb` and `2_calculo_produccion_ciudades_FV.ipynb`.  
+
+Due to their large size (≈9 GB), these time-series are **not included in the repository**, but can be **fully reproduced** by users with a Copernicus account (free access after registration).
 
 ---
