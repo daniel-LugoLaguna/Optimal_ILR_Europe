@@ -4,7 +4,7 @@ The project quantifies the techno-economic trade-offs of DC oversizing (Inverter
 
 ---
 
-## 🔍 Repository overview
+## Repository overview
 
 | Folder | Description |
 |--------|--------------|
@@ -14,7 +14,7 @@ The project quantifies the techno-economic trade-offs of DC oversizing (Inverter
 
 ---
 
-## ⚙️ Workflow summary
+## Workflow summary
 
 1. **`1_carga_ficheros_ciudades_FV.ipynb`** – Loads minute-resolution irradiance and temperature data for each capital and prepares PV system inputs.
 2. **`2_calculo_produccion_ciudades_FV.ipynb`** – Calculates hourly and annual PV generation for a range of ILR values using the defined plant model.
@@ -24,7 +24,7 @@ The project quantifies the techno-economic trade-offs of DC oversizing (Inverter
 
 ---
 
-## 📂 Available datasets
+## Available datasets
 
 | File | Description |
 |------|--------------|
