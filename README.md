@@ -1,6 +1,6 @@
 # Optimal ILR in Utility-Scale PV Plants Across Europe
 
-The project quantifies the techno-economic optimization of DC oversizing (Inverter Loading Ratio, ILR) in utility-scale photovoltaic (PV) plants across European capitals, integrating minute-resolution energy production data with country-specific financial parameters.
+This repository accompanies the manuscript *"The Economics of DC Oversizing: Optimal Inverter Loading Ratios across Europe"*. It quantifies the techno-economic optimization of DC oversizing (Inverter Loading Ratio, ILR) in utility-scale photovoltaic (PV) plants across European capitals, integrating minute-resolution energy production data with country-specific financial parameters.
 
 ---
 
@@ -10,10 +10,14 @@ The project quantifies the techno-economic optimization of DC oversizing (Invert
 |--------|--------------|
 | **`notebooks/`** | Jupyter notebooks containing all computational steps, from irradiance data retrieval to financial analysis and figure generation. |
 | **`data/`** | Core simulation outputs and derived economic results (CSV files). Large intermediate irradiance time-series are not included due to size constraints (>9 GB). |
+| **`LICENSE`** | License governing the use of the code and data in this repository. |
+| **`README.md`** | This document. |
 
 ---
 
 ## Workflow Summary
+
+The `notebooks/` folder contains the full pipeline, organized as five sequential notebooks:
 
 1. **`1_load_city_files.ipynb`** – Retrieves and formats irradiance and temperature data for each capital.
 2. **`2_calculate_city_energy.ipynb`** – Computes DC and AC generation for a range of ILR values.
@@ -25,17 +29,24 @@ The project quantifies the techno-economic optimization of DC oversizing (Invert
 
 ## Available datasets
 
+All processed datasets are provided in the `data/` directory:
+
 | File | Description |
 |------|--------------|
 | `all_cities_all_ILR_energy.csv` | Annual energy yield (AC) for each city and ILR configuration. |
-| `ilr_costs_by_city.csv` | CAPEX, OPEX, and discount rate assumptions per country. |
+| `results_summary.csv` | Summary of AC energy and nominal AC power per city and ILR. |
+| `ilr_costs_by_city.csv` | CAPEX, OPEX, and cost-component breakdown per city and ILR. |
 | `financial_results_parametric.csv` | Sensitivity results varying module costs and PPA prices. |
-| `optimal_ilr_by_country_all_scenarios.csv` | Summary of optimal ILR values under different financial and technical conditions. |
+| `optimal_ilr_by_country_all_scenarios.csv` | Optimal ILR values under different financial and technical conditions. |
+| `AppendixD_baseline_yields_calibrated.csv` | Calibrated baseline annual AC energy (ILR = 1.0) for each capital, as reported in Appendix D of the manuscript. |
+| `counterfactual_experiment_results.csv` | Results of the counterfactual decomposition of irradiance and cost-of-capital effects (Appendix E). |
+| `Discount_rate_estimation.csv` | Country-level inputs and derived components of the discount rate / WACC (see section below). |
 
 ---
-## Financial parameters and discount-rate
 
-In order to make the techno-economic comparison across European capitals transparent, the repository includes the country-level inputs used to compute the discount rate (DR) / WACC applied in the simulations.
+## Financial parameters and discount rate
+
+To make the techno-economic comparison across European capitals transparent, the repository includes the country-level inputs used to compute the discount rate (DR) / WACC applied in the simulations.
 
 The file **`data/Discount_rate_estimation.csv`** contains, for each country:
 
@@ -52,8 +63,7 @@ The file **`data/Discount_rate_estimation.csv`** contains, for each country:
 - `WACC` – Weighted Average Cost of Capital, after tax (%)
 - `DR` – Final discount rate used in the cash-flow model (%)
 
-**Important:** in the notebooks we only load the **final** discount rate (`DR`) for each country to keep the code compact.  
-The **full derivation** of these values — CAPM, debt leg, tax effect and final spread — is documented in the manuscript, where every intermediate step is explained and referenced.
+**Important:** in the notebooks we only load the **final** discount rate (`DR`) for each country to keep the code compact. The **full derivation** of these values — CAPM, debt leg, tax effect and final spread — is documented in the manuscript (Appendix B), where every intermediate step is explained and referenced.
 
 This separation (CSV with inputs + explanation in the paper) allows:
 1. reproducibility of the numerical results,
@@ -61,6 +71,7 @@ This separation (CSV with inputs + explanation in the paper) allows:
 3. future updates of country-specific financial conditions without modifying the modeling code.
 
 ---
+
 ## Data sources
 
 The modeling framework integrates high-resolution irradiance, meteorological, and component performance data from open-access scientific repositories.
@@ -70,9 +81,7 @@ Irradiance inputs were obtained from the **Copernicus Atmosphere Monitoring Serv
 
 > [CAMS Solar Radiation Service – Time Series](https://ads.atmosphere.copernicus.eu/datasets/cams-solar-radiation-timeseries?tab=download)
 
-CAMS provides hourly and sub-hourly solar radiation data derived from satellite observations and reanalysis models, distributed under the **Copernicus Data Licence**.  
-All irradiance datasets were downloaded for the coordinates of each European capital and processed using the notebooks  
-`1_load_city_files.ipynb` and `2_calculate_city_energy.ipynb`.
+CAMS provides hourly and sub-hourly solar radiation data derived from satellite observations and reanalysis models, distributed under the **Copernicus Data Licence**. All irradiance datasets were downloaded for the coordinates of each European capital and processed using the notebooks `1_load_city_files.ipynb` and `2_calculate_city_energy.ipynb`.
 
 ### Meteorological data
 Complementary meteorological variables — including ambient temperature, wind speed, and relative humidity — were retrieved through the **Open-Meteo API**, an open-access service:
@@ -88,8 +97,8 @@ Technical characteristics of the PV modules and inverters were obtained from the
 
 The following components were used throughout the simulations:
 
-- **PV module:** *Chint New Energy Technology Co., Ltd. — CHSM66M-DG(FBH)-635*  
-- **Inverter:** *Chint Power Systems America — CPS SCH350KTL-DO/US-800 (800 V)*  
+- **PV module:** *Chint New Energy Technology Co., Ltd. — CHSM66M(DG)/F-BH (635 W)*
+- **Inverter:** *Chint Power Systems America — CPS SCH350KTL-DO/US-800 (800 V)*
 
 These devices were selected as representative of modern utility-scale equipment and are included in the **CEC (California Energy Commission) database** integrated in **NREL/SAM** and **pvlib-python**.
 
@@ -101,8 +110,6 @@ PV system performance was simulated with **pvlib-python**, an open-source librar
 pvlib was used to load CEC module and inverter parameters, compute plane-of-array irradiance, apply temperature models, and evaluate AC power at one-minute resolution.
 
 ### Data reproducibility
-Due to their size (≈9 GB), the raw time-series of irradiance and meteorological data are **not included** in this repository.  
-However, all datasets can be **fully reproduced** by users with a free CAMS and Open-Meteo account, following the workflow in the notebooks above.  
-Derived results and processed data — including annual energy yields, clipping ratios, and financial indicators — are provided as CSV files in the `data/` directory.
+Due to their size (≈9 GB), the raw time-series of irradiance and meteorological data are **not included** in this repository. However, all datasets can be **fully reproduced** by users with a free CAMS and Open-Meteo account, following the workflow in the notebooks above. Derived results and processed data — including annual energy yields, clipping ratios, and financial indicators — are provided as CSV files in the `data/` directory.
 
 ---
